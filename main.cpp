@@ -7,18 +7,17 @@
 #include "merge_sort.hpp"
 #include "quick_sort.hpp"
 
-
 using namespace std;
 
-int main() {
-    // Tamanho e tipo do vetor
-    size_t tamanho = 1000;
-    TipoVetor tipo = TipoVetor::ALEATORIO;
-
-    // Gerar vetor base
+void executarTestes(size_t tamanho, TipoVetor tipo) {
     vector<int> original = gerarVetor(tamanho, tipo);
+    
+    if (tamanho <= 20) {
+        cout << "\nVetor original:\n";
+        imprimirVetor(original);
+    }
 
-    // Testar Bubble Sort
+    //Testar Bubble Sort
     vector<int> v1 = original;
     SortMetrics metrics1;
     long long tempo1 = medirTempo([&]() {
@@ -83,5 +82,55 @@ int main() {
     cout << "Trocas: " << metrics5.trocas << endl;
     cout << endl;
 
+    //imprime apenas o vetor ordenado pelo Quick Sort para evitar repeticao na saida
+    if (tamanho <= 20) {
+        cout << "\nVetor ordenado (Quick Sort):\n";
+        imprimirVetor(v5);
+    }
+
+
+}
+
+int main() {
+
+    while (true) {
+        size_t tamanho;
+        int tipoEscolhido;
+
+        cout << "\n===== Menu de Testes de Ordenacao =====\n";
+        cout << "Digite o tamanho do vetor: ";
+        cin >> tamanho;
+
+         cout << "\nEscolha o tipo de vetor:\n";
+        cout << "1 - Aleatorio\n";
+        cout << "2 - Quase Ordenado\n";
+        cout << "3 - Inverso\n";
+        cout << "Opcao: ";
+        cin >> tipoEscolhido;
+
+        TipoVetor tipo;
+        switch (tipoEscolhido) {
+            case 1: tipo = TipoVetor::ALEATORIO; 
+            break;
+            case 2: tipo = TipoVetor::QUASE_ORDENADO;
+            break;
+            case 3: tipo = TipoVetor::INVERSO; 
+            break;
+            default:
+                cout << "Opcao invalida. Usando ALEATORIO como padrao.\n";
+                tipo = TipoVetor::ALEATORIO;
+        }
+
+        executarTestes(tamanho, tipo);
+
+        char repetir;
+        cout << "\nDeseja realizar outro teste? (s/n): ";
+        cin >> repetir;
+        if (repetir != 's' && repetir != 'S') {
+            break;
+        }
+    }
+    
+    cout << "\nEncerrando programa. Obrigada!\n";
     return 0;
 }

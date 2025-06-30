@@ -27,3 +27,17 @@ void imprimirVetor(const vector<int>& v) {
         cout << val << " ";
     cout << endl;
 }
+
+bool desejaContinuar() {
+    char repetir;
+    while (true) {
+        cout << "\nDeseja realizar outro teste? (s/n): ";
+        cin >> repetir;
+
+        if (repetir == 's' || repetir == 'S') return true;
+        if (repetir == 'n' || repetir == 'N') return false;
+
+        cout << "Entrada invalida. Por favor, digite 's' para sim ou 'n' para nao.\n";
+    }
+}
+

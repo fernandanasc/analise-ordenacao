@@ -35,4 +35,6 @@ long long medirTempo(Func func) {
     return chrono::duration_cast<chrono::milliseconds>(fim - inicio).count();
 }
 
+bool desejaContinuar();
+
 #endif

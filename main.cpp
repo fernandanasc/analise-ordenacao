@@ -10,11 +10,15 @@
 using namespace std;
 
 void executarTestes(size_t tamanho, TipoVetor tipo) {
+    const size_t limiteImpressao = 100; // Limite para mostrar o vetor
+
     vector<int> original = gerarVetor(tamanho, tipo);
     
-    if (tamanho <= 20) {
+    if (tamanho <= limiteImpressao) {
         cout << "\nVetor original:\n";
         imprimirVetor(original);
+    } else {
+        cout << "\n(Vetor original nao exibido: tamanho excede " << limiteImpressao << " elementos)\n";
     }
 
     //Testar Bubble Sort
@@ -82,10 +86,12 @@ void executarTestes(size_t tamanho, TipoVetor tipo) {
     cout << "Trocas: " << metrics5.trocas << endl;
     cout << endl;
 
-    //imprime apenas o vetor ordenado pelo Quick Sort para evitar repeticao na saida
-    if (tamanho <= 20) {
+    if (tamanho <= limiteImpressao) {
+        //imprime apenas o vetor ordenado pelo Quick Sort para evitar repetição na saida
         cout << "\nVetor ordenado (Quick Sort):\n";
         imprimirVetor(v5);
+    } else {
+        cout << "\n(Vetor ordenado nao exibido: tamanho excede " << limiteImpressao << " elementos)\n";
     }
 
 

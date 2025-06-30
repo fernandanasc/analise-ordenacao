@@ -3,7 +3,7 @@ EXEC = main.exe
 
 # Compilador e flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Iinclude
+CXXFLAGS = -std=c++17 -Wall -Ofast -Iinclude
 
 # Diretórios
 SRC_DIR = src

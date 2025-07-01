@@ -1,17 +1,20 @@
 #include "testes.hpp"
 #include <iostream>
 #include <vector>
+#include <iomanip>
+
 
 using namespace std;
 
 void testarAlgoritmo(const string& nome, void(*func)(vector<int>&, SortMetrics&), const vector<int>& original) {
     vector<int> copia = original;
     SortMetrics m;
-    long long tempo = medirTempo([&]() {
+    double tempo = medirTempo([&]() {
         func(copia, m);
     });
 
     cout << "=== " << nome << " ===" << endl;
+    cout << fixed << setprecision(3);
     cout << "Tempo: " << tempo << " ms" << endl;
     cout << "Comparacoes: " << m.comparacoes << endl;
     cout << "Trocas: " << m.trocas << endl << endl;

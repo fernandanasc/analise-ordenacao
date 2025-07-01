@@ -28,11 +28,11 @@ void imprimirVetor(const vector<int>& v);
 
 // Função template para medir tempo de execução (em milissegundos)
 template<typename Func>
-long long medirTempo(Func func) {
+double medirTempo(Func func) {
     auto inicio = chrono::high_resolution_clock::now();
     func();
     auto fim = chrono::high_resolution_clock::now();
-    return chrono::duration_cast<chrono::milliseconds>(fim - inicio).count();
+    return chrono::duration<double, milli>(fim - inicio).count();
 }
 
 bool desejaContinuar();

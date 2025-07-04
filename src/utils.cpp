@@ -55,6 +55,21 @@ string tipoVetorParaString(TipoVetor tipo) {
     }
 }
 
+string formatarNumeroCSV(double numero) {
+    string resultado = to_string(numero);
+    // Substitui ponto por vírgula para formato brasileiro
+    size_t pos = resultado.find('.');
+    if (pos != string::npos) {
+        resultado[pos] = ',';
+    }
+    // Remove zeros desnecessários no final
+    if (resultado.find(',') != string::npos) {
+        resultado.erase(resultado.find_last_not_of('0') + 1, string::npos);
+        resultado.erase(resultado.find_last_not_of(',') + 1, string::npos);
+    }
+    return resultado;
+}
+
 TestData testarAlgoritmoParaCSV(const string& nome, void(*func)(vector<int>&, SortMetrics&), const vector<int>& original, TipoVetor tipo) {
     vector<int> copia = original;
     SortMetrics m;
@@ -96,13 +111,13 @@ void exportarDadosCompletos() {
     cout << "\n\n=== SALVANDO ARQUIVO CSV ===\n";
     // Exportar para CSV - Gráfico de linhas (tempo x tamanho)
     ofstream arquivo1("data/tempo_por_tamanho.csv");
-    arquivo1 << "Tamanho,Tempo_ms,Tipo_Vetor,Algoritmo\n";
+    arquivo1 << "Tamanho;Tempo_ms;Tipo_Vetor;Algoritmo\n";
     for (const auto& d : dados) {
-        arquivo1 << d.tamanho << "," << d.tempo << "," << d.tipoVetor << "," << d.algoritmo << "\n";
+        arquivo1 << d.tamanho << ";" << formatarNumeroCSV(d.tempo) << ";" << d.tipoVetor << ";" << d.algoritmo << "\n";
     }
     arquivo1.close();
 
-    cout << " Arquivo 'data/tempo_por_tamanho.csv' criado com sucesso!\n";
+    cout << "Arquivo 'data/tempo_por_tamanho.csv' criado com sucesso!\n";
 }
 
 void exportarComparacoesTrocas(size_t tamanho, TipoVetor tipo) {
@@ -123,9 +138,9 @@ void exportarComparacoesTrocas(size_t tamanho, TipoVetor tipo) {
     // Exportar para CSV - Gráfico de barras (comparações e trocas)
     string nomeArquivo = "data/comparacoes_trocas_" + to_string(tamanho) + "_" + tipoVetorParaString(tipo) + ".csv";
     ofstream arquivo(nomeArquivo);
-    arquivo << "Algoritmo,Comparacoes,Trocas\n";
+    arquivo << "Algoritmo;Comparacoes;Trocas\n";
     for (const auto& d : dados) {
-        arquivo << d.algoritmo << "," << d.comparacoes << "," << d.trocas << "\n";
+        arquivo << d.algoritmo << ";" << d.comparacoes << ";" << d.trocas << "\n";
     }
     arquivo.close();
 
@@ -153,12 +168,12 @@ void exportarTemposPorTipo(size_t tamanho) {
     // Exportar para CSV - Gráfico de barras (tempo por tipo de vetor)
     string nomeArquivo = "data/tempo_por_tipo_" + to_string(tamanho) + ".csv";
     ofstream arquivo(nomeArquivo);
-    arquivo << "Algoritmo,Tipo_Vetor,Tempo_ms\n";
+    arquivo << "Algoritmo;Tipo_Vetor;Tempo_ms\n";
     for (const auto& d : dados) {
-        arquivo << d.algoritmo << "," << d.tipoVetor << "," << d.tempo << "\n";
+        arquivo << d.algoritmo << ";" << d.tipoVetor << ";" << formatarNumeroCSV(d.tempo) << "\n";
     }
     arquivo.close();
 
-    cout << "\nArquivo '" << nomeArquivo << "' criado com sucesso!\n";
+    cout << "\n Arquivo '" << nomeArquivo << "' criado com sucesso!\n";
 }
 

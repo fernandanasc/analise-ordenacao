@@ -15,16 +15,20 @@ static void mergeSort(vector<int>& vetor, int inicio, int meio, int fim, SortMet
             vetor[k++] = esquerda[i++];
         } else {
             vetor[k++] = direita[j++];
-            metrics.trocas++; // Considera troca como inserção fora de lugar original
         }
+        metrics.trocas++; // Conta toda escrita como uma troca
     }
 
     while (i < esquerda.size()) {
         vetor[k++] = esquerda[i++];
+        metrics.trocas++;
+
     }
 
     while (j < direita.size()) {
         vetor[k++] = direita[j++];
+        metrics.trocas++;
+
     }
 }
 

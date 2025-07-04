@@ -8,6 +8,7 @@
 #include <chrono>
 #include <functional>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -36,5 +37,20 @@ double medirTempo(Func func) {
 }
 
 bool desejaContinuar();
+
+// Estrutura para armazenar dados de teste
+struct TestData {
+    string algoritmo;
+    string tipoVetor;
+    size_t tamanho;
+    double tempo;
+    size_t comparacoes;
+    size_t trocas;
+};
+
+// Funções para exportação CSV
+void exportarDadosCompletos();
+void exportarComparacoesTrocas(size_t tamanho, TipoVetor tipo);
+void exportarTemposPorTipo(size_t tamanho);
 
 #endif

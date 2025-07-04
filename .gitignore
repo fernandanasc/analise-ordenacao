@@ -1,0 +1,57 @@
+# Executáveis
+*.exe
+*.out
+main
+
+# Arquivos objeto
+*.o
+*.obj
+
+# Diretório de objetos
+obj/
+
+# Arquivos de dados gerados
+data/*.csv
+
+# Arquivos temporários do sistema
+*.tmp
+*.temp
+
+# Arquivos do Visual Studio Code
+.vscode/
+
+# Arquivos do Visual Studio
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+
+# Arquivos de debug
+*.pdb
+*.ilk
+
+# Arquivos de cache
+*.cache
+
+# Logs
+*.log
+
+# Arquivos de backup
+*~
+*.bak
+*.swp
+*.swo
+
+# Arquivos do sistema (Windows)
+Thumbs.db
+Desktop.ini
+
+# Arquivos do sistema (macOS)
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Arquivos do sistema (Linux)
+*~

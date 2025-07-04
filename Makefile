@@ -28,6 +28,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 # Limpeza dos arquivos gerados
 clean:
-	@if exist $(OBJ_DIR) del /q $(OBJ_DIR)\*.o
-	@if exist $(OBJ_DIR) rmdir /s /q $(OBJ_DIR)
-	@if exist $(EXEC) del /q $(EXEC)
+	@echo Iniciando limpeza completa...
+	@if exist $(OBJ_DIR) del /q $(OBJ_DIR)\*.o && echo - Arquivos objeto removidos
+	@if exist $(OBJ_DIR) rmdir /s /q $(OBJ_DIR) && echo - Diretorio obj removido
+	@if exist $(EXEC) del /q $(EXEC) && echo - Executavel main.exe removido
+	@powershell -Command "if (Test-Path 'data\*.csv') { Remove-Item 'data\*.csv' -Force; Write-Host '- Arquivos CSV removidos' } else { Write-Host '- Nenhum arquivo CSV encontrado' }"
+	@echo Limpeza completa concluida!
+
+# Limpeza apenas dos arquivos CSV
+clean-data:
+	@echo Removendo arquivos CSV...
+	@powershell -Command "if (Test-Path 'data\*.csv') { Remove-Item 'data\*.csv' -Force; Write-Host 'Arquivos CSV removidos da pasta data/' } else { Write-Host 'Nenhum arquivo CSV encontrado na pasta data/' }"
+
+.PHONY: all clean clean-data

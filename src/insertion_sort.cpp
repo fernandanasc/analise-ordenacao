@@ -20,6 +20,11 @@ void insertionSort(vector<int>& vetor, SortMetrics& metrics) {
             }
         }
 
-        vetor[j] = chave;
+        // Se j != i, significa que houve pelo menos uma inserção
+        if (j != i) {
+            vetor[j] = chave;
+            metrics.trocas++; // Conta a inserção final como troca
+            // Esta inserção final também deve ser contada como uma operação
+        }
     }
 }

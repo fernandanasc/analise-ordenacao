@@ -1,4 +1,9 @@
 #include "utils.hpp"
+#include "bubble_sort.hpp"
+#include "insertion_sort.hpp"
+#include "selection_sort.hpp"
+#include "merge_sort.hpp"
+#include "quick_sort.hpp"
 #include <algorithm>
 
 using namespace std;
@@ -39,5 +44,121 @@ bool desejaContinuar() {
 
         cout << "Entrada invalida. Por favor, digite 's' para sim ou 'n' para nao.\n";
     }
+}
+
+string tipoVetorParaString(TipoVetor tipo) {
+    switch (tipo) {
+        case TipoVetor::ALEATORIO: return "Aleatorio";
+        case TipoVetor::QUASE_ORDENADO: return "Quase_Ordenado";
+        case TipoVetor::INVERSO: return "Inverso";
+        default: return "Desconhecido";
+    }
+}
+
+TestData testarAlgoritmoParaCSV(const string& nome, void(*func)(vector<int>&, SortMetrics&), const vector<int>& original, TipoVetor tipo) {
+    vector<int> copia = original;
+    SortMetrics m;
+    double tempo = medirTempo([&]() {
+        func(copia, m);
+    });
+
+    TestData data;
+    data.algoritmo = nome;
+    data.tipoVetor = tipoVetorParaString(tipo);
+    data.tamanho = original.size();
+    data.tempo = tempo;
+    data.comparacoes = m.comparacoes;
+    data.trocas = m.trocas;
+    
+    return data;
+}
+
+void exportarDadosCompletos() {
+    vector<size_t> tamanhos = {100, 500, 1000, 2000, 5000, 10000};
+    vector<TipoVetor> tipos = {TipoVetor::ALEATORIO, TipoVetor::QUASE_ORDENADO, TipoVetor::INVERSO};
+    vector<TestData> dados;
+
+    cout << "\n=== COLETANDO DADOS PARA GRAFICO DE LINHAS ===\n";
+    cout << "Testando todos os algoritmos com diferentes tamanhos e tipos de vetor...\n";
+    
+    for (size_t tamanho : tamanhos) {
+        for (TipoVetor tipo : tipos) {
+            vector<int> vetor = gerarVetor(tamanho, tipo);
+            
+            dados.push_back(testarAlgoritmoParaCSV("Bubble_Sort", bubbleSort, vetor, tipo));
+            dados.push_back(testarAlgoritmoParaCSV("Insertion_Sort", insertionSort, vetor, tipo));
+            dados.push_back(testarAlgoritmoParaCSV("Selection_Sort", selectionSort, vetor, tipo));
+            dados.push_back(testarAlgoritmoParaCSV("Merge_Sort", mergeSort, vetor, tipo));
+            dados.push_back(testarAlgoritmoParaCSV("Quick_Sort", quickSort, vetor, tipo));
+        }
+    }
+
+    cout << "\n\n=== SALVANDO ARQUIVO CSV ===\n";
+    // Exportar para CSV - Gráfico de linhas (tempo x tamanho)
+    ofstream arquivo1("data/tempo_por_tamanho.csv");
+    arquivo1 << "Tamanho,Tempo_ms,Tipo_Vetor,Algoritmo\n";
+    for (const auto& d : dados) {
+        arquivo1 << d.tamanho << "," << d.tempo << "," << d.tipoVetor << "," << d.algoritmo << "\n";
+    }
+    arquivo1.close();
+
+    cout << " Arquivo 'data/tempo_por_tamanho.csv' criado com sucesso!\n";
+}
+
+void exportarComparacoesTrocas(size_t tamanho, TipoVetor tipo) {
+    cout << "\n=== COLETANDO DADOS DE COMPARACOES E TROCAS ===\n";
+    cout << "Tamanho: " << tamanho << " elementos\n";
+    cout << "Tipo: " << tipoVetorParaString(tipo) << "\n\n";
+    
+    vector<int> vetor = gerarVetor(tamanho, tipo);
+    vector<TestData> dados;
+
+    cout << "Testando algoritmos...\n";
+    dados.push_back(testarAlgoritmoParaCSV("Bubble_Sort", bubbleSort, vetor, tipo));
+    dados.push_back(testarAlgoritmoParaCSV("Insertion_Sort", insertionSort, vetor, tipo));
+    dados.push_back(testarAlgoritmoParaCSV("Selection_Sort", selectionSort, vetor, tipo));
+    dados.push_back(testarAlgoritmoParaCSV("Merge_Sort", mergeSort, vetor, tipo));
+    dados.push_back(testarAlgoritmoParaCSV("Quick_Sort", quickSort, vetor, tipo));
+
+    // Exportar para CSV - Gráfico de barras (comparações e trocas)
+    string nomeArquivo = "data/comparacoes_trocas_" + to_string(tamanho) + "_" + tipoVetorParaString(tipo) + ".csv";
+    ofstream arquivo(nomeArquivo);
+    arquivo << "Algoritmo,Comparacoes,Trocas\n";
+    for (const auto& d : dados) {
+        arquivo << d.algoritmo << "," << d.comparacoes << "," << d.trocas << "\n";
+    }
+    arquivo.close();
+
+    cout << "\n Arquivo '" << nomeArquivo << "' criado com sucesso!\n";
+}
+
+void exportarTemposPorTipo(size_t tamanho) {
+    cout << "\n=== COLETANDO DADOS DE TEMPO POR TIPO DE VETOR ===\n";
+    cout << "Tamanho: " << tamanho << " elementos\n";
+    cout << "Comparando os 3 tipos de vetor para todos os algoritmos...\n\n";
+    
+    vector<TipoVetor> tipos = {TipoVetor::ALEATORIO, TipoVetor::QUASE_ORDENADO, TipoVetor::INVERSO};
+    vector<TestData> dados;
+
+    for (TipoVetor tipo : tipos) {
+        vector<int> vetor = gerarVetor(tamanho, tipo);
+        
+        dados.push_back(testarAlgoritmoParaCSV("Bubble_Sort", bubbleSort, vetor, tipo));
+        dados.push_back(testarAlgoritmoParaCSV("Insertion_Sort", insertionSort, vetor, tipo));
+        dados.push_back(testarAlgoritmoParaCSV("Selection_Sort", selectionSort, vetor, tipo));
+        dados.push_back(testarAlgoritmoParaCSV("Merge_Sort", mergeSort, vetor, tipo));
+        dados.push_back(testarAlgoritmoParaCSV("Quick_Sort", quickSort, vetor, tipo));
+    }
+
+    // Exportar para CSV - Gráfico de barras (tempo por tipo de vetor)
+    string nomeArquivo = "data/tempo_por_tipo_" + to_string(tamanho) + ".csv";
+    ofstream arquivo(nomeArquivo);
+    arquivo << "Algoritmo,Tipo_Vetor,Tempo_ms\n";
+    for (const auto& d : dados) {
+        arquivo << d.algoritmo << "," << d.tipoVetor << "," << d.tempo << "\n";
+    }
+    arquivo.close();
+
+    cout << "\nArquivo '" << nomeArquivo << "' criado com sucesso!\n";
 }
 
